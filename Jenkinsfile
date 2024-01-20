@@ -28,7 +28,7 @@ pipeline {
 	stage('Create Instance') {
 	 steps {
     
-    'gcloud compute instances create test1 --zone=us-central1-a --tags=http-server --scopes=storage-ro --metadata-from-file=startup-script=./startupscript.sh'
+    sh 'gcloud compute instances create test1 --zone=us-central1-a --tags=http-server --scopes=storage-ro --metadata-from-file=startup-script=./startupscript.sh'
       
     }
     }
