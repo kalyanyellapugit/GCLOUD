@@ -28,7 +28,7 @@ pipeline {
 	stage('Create Instance') {
 	 steps {
     
-    sh 'gcloud compute instances create test1 --zone=us-central1-a --tags=http-server --scopes=storage-ro --metadata-from-file=startup-script=./startupscript.sh'
+    sh 'gcloud compute instances create test2 --zone=us-central1-b --tags=http-server --scopes=storage-ro --metadata-from-file=startup-script=./startupscript.sh'
       
     }
     }
@@ -40,7 +40,25 @@ pipeline {
         
     }
     }
-    
+
+    stage('Collect External IP') {
+steps {
+
+sh "gcloud compute instances describe test2 --zone=us-central1-b --format='get(networkInterfaces[0].accessConfigs[0].natIP)' > ip.txt"
+sh 'cat ip.txt'
+
+}
+}
+
+
+
+stage('App health check') {
+steps {
+sh 'sleep 240'
+sh 'curl http://$(cat ip.txt)'
+
+}
+}
     
    }
 }
